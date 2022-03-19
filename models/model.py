@@ -124,16 +124,12 @@ class Im2LatexModel(nn.Module):
             for decoder
         """
         mean_enc_out = enc_out.mean(dim=1)
-        h = self._init_h(mean_enc_out)
-        c = self._init_c(mean_enc_out)
-        init_o = self._init_o(mean_enc_out)
+
+        h,c,init_o = self._init_states(mean_enc_out)
         return (h, c), init_o
 
-    def _init_h(self, mean_enc_out):
-        return torch.tanh(self.init_wh(mean_enc_out))
-
-    def _init_c(self, mean_enc_out):
-        return torch.tanh(self.init_wc(mean_enc_out))
-
-    def _init_o(self, mean_enc_out):
-        return torch.tanh(self.init_wo(mean_enc_out))
+    def _init_states(self,mean_enc_out):
+        h = torch.tanh(self.init_wh(mean_enc_out))
+        c = torch.tanh(self.init_wc(mean_enc_out))
+        o = torch.tanh(self.init_wo(mean_enc_out))
+        return h,c,o
