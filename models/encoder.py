@@ -11,7 +11,6 @@ class Encoder(nn.Module):
     self.conv3_ = nn.Conv2d(in_channels = 256,out_channels = 256 ,kernel_size=(3,3),padding=(1,1),stride=(1,1))
     self.conv4 = nn.Conv2d(in_channels = 256,out_channels = 512 ,kernel_size=(3,3),padding=(1,1),stride=(1,1))
     self.max_pool = nn.MaxPool2d(kernel_size=(2,2),padding=(0,0),stride=(2,2))
-    self.max_pool2 = nn.MaxPool2d(kernel_size=(2,1),padding=(0,0),stride=(2,1))
     self.batch_norm2 = nn.BatchNorm2d(num_features=512)
     self.batch_norm1 = nn.BatchNorm2d(num_features=256)
 
@@ -28,9 +27,12 @@ class Encoder(nn.Module):
     x = self.conv4(x)
     x = self.batch_norm2(x)
 
+
     p_enc_2d = PositionalEncodingPermute2D(x.shape[1])
+    
     penc_x = p_enc_2d(x)
     assert penc_x.size()==x.size()
+
 
     combined_x = penc_x+x
     combined_x = combined_x.reshape(x.shape[0],x.shape[2]*x.shape[3],1,x.shape[1])
@@ -41,4 +43,4 @@ if __name__ == '__main__':
     x = torch.randn(64,1,28,28)
     # print(x.shape)
     x=encoder(x)
-    print(x.shape)
+    # print(x.shape)
