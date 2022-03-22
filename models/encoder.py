@@ -43,4 +43,4 @@ if __name__ == '__main__':
     x = torch.randn(64,1,28,28)
     # print(x.shape)
     x=encoder(x)
-    # print(x.shape)
+    print(x.shape)
